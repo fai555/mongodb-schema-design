@@ -5,7 +5,11 @@ mongoose.connect('mongodb://localhost/Twisker');
 
 
 var db = mongoose.connection;
+
+mongoose.connection.dropDatabase();
+
 db.on('error', console.error.bind(console, 'connection error:'));
+
 db.once('open', function() {
   // we're connected!
   console.log("connected")
@@ -70,74 +74,152 @@ var GroupModel = mongoose.model("Group", Group);
 var UserModel = mongoose.model("User", User);
 var TimelineModel = mongoose.model("Timeline", Timeline);
 
+var organization = new OrganizationModel;
 
-var Twisker = new OrganizationModel({
-	orgName:"Twisker",
-	dateCreated: new Date(),
-	orgURL: "orgURL",
-	profilePictureURL: "profilePictureURL",
-	bio: "bio",
-	location: "location",
-	accessLevel: "accessLevel",
-	settings: "settings",
-	groups:[
+organization.insertOne(
+	{
+		orgName:"Twisker",
+		dateCreated: new Date(),
+		orgURL: "orgURL",
+		profilePictureURL: "profilePictureURL",
+		bio: "bio",
+		location: "location",
+		accessLevel: "accessLevel",
+		settings: "settings",
+		groups:[],
+		members:[],
+	}
+)
+
+
+// organization.groups.push()
+
+var group = new GroupModel(
 		{
-			groupName: "Design",
-			dateCreated: new Date(),
-			profilePictureURL: "profilePictureURL",
-			bio: "bio",
-			accessLevel: "accessLevel",
-			settings: "settings",
-			member: [
-				{
-						username: "tom",
-						dateJoined: new Date(),
-						profilePictureURL: "profilePictureURL",
-						occupation: "occupation",
-						location: "location",
-						settings: "settings",
-						memberType: "memberType",
-						timelines: [
-							{
-								// title: String,
-								// accessLevel: String,
-								// ownerId: String,
-								// ownerType: String,
-								// authorId: String,
-								// authorName: String,
-								// posts:[Post],
-							}
-						],
-				}
-			],
-		},
-		{
-			groupName: "Group 2",
-			dateCreated: new Date(),
-			profilePictureURL: "profilePictureURL",
-			bio: "bio",
-			accessLevel: "accessLevel",
-			settings: "settings",
-			member: [
-				{
-						username: "tom 2",
-						dateJoined: new Date(),
-						profilePictureURL: "profilePictureURL",
-						occupation: "occupation",
-						location: "location",
-						settings: "settings",
-						memberType: "memberType",
-						timelines: [],
-				}
-			],
-		}
-	]
+		groupName: "Admin",
+		dateCreated: new Date(),
+		profilePictureURL: "profilePictureURL",
+		bio: "bio",
+		accessLevel: "accessLevel",
+		settings: "settings",
+		members:[],
+		timelines:[],
+	}, function(err, gr){
+		organization.groups.push(gr._id)
+	}
+);
 
-});
+organization.save()
+group.save()
+  
 
-Twisker.save(function (err, Twisker) {
-	if (err) return console.error(err);
-	// Twisker.speak();
-});
+
+
+
+	// ,function (err, org) {
+	// 	if (err) return handleError(err);
+		
+	
+	// 	GroupModel.insertMany([
+	// 		{
+	// 			groupName: "Admin",
+	// 			dateCreated: new Date(),
+	// 			profilePictureURL: "profilePictureURL",
+	// 			bio: "bio",
+	// 			accessLevel: "accessLevel",
+	// 			settings: "settings",
+	// 			members:[],
+	// 			timelines:[],
+	// 		},
+	// 		{
+	// 			groupName: "Design",
+	// 			dateCreated: new Date(),
+	// 			profilePictureURL: "profilePictureURL",
+	// 			bio: "bio",
+	// 			accessLevel: "accessLevel",
+	// 			settings: "settings",
+	// 			members:[],
+	// 			timelines:[],
+	// 		}
+		
+	// 	], function(err, group){
+		
+	// 		org.groups.push(group._id)
+		
+	// 	})
+		
+	
+	
+	//   }
+
+// var Twisker = new OrganizationModel(
+// {
+// 	orgName:"Twisker",
+// 	dateCreated: new Date(),
+// 	orgURL: "orgURL",
+// 	profilePictureURL: "profilePictureURL",
+// 	bio: "bio",
+// 	location: "location",
+// 	accessLevel: "accessLevel",
+// 	settings: "settings",
+// 	groups:[
+// 		{
+// 			groupName: "Design",
+// 			dateCreated: new Date(),
+// 			profilePictureURL: "profilePictureURL",
+// 			bio: "bio",
+// 			accessLevel: "accessLevel",
+// 			settings: "settings",
+// 			member: [
+// 				{
+// 						username: "tom",
+// 						dateJoined: new Date(),
+// 						profilePictureURL: "profilePictureURL",
+// 						occupation: "occupation",
+// 						location: "location",
+// 						settings: "settings",
+// 						memberType: "memberType",
+// 						timelines: [
+// 							{
+// 								// title: String,
+// 								// accessLevel: String,
+// 								// ownerId: String,
+// 								// ownerType: String,
+// 								// authorId: String,
+// 								// authorName: String,
+// 								// posts:[Post],
+// 							}
+// 						],
+// 				}
+// 			],
+// 		},
+// 		{
+// 			groupName: "Group 2",
+// 			dateCreated: new Date(),
+// 			profilePictureURL: "profilePictureURL",
+// 			bio: "bio",
+// 			accessLevel: "accessLevel",
+// 			settings: "settings",
+// 			member: [
+// 				{
+// 						username: "tom 2",
+// 						dateJoined: new Date(),
+// 						profilePictureURL: "profilePictureURL",
+// 						occupation: "occupation",
+// 						location: "location",
+// 						settings: "settings",
+// 						memberType: "memberType",
+// 						timelines: [],
+// 				}
+// 			],
+// 		}
+// 	]
+
+// });
+
+// Twisker.save(function (err, Twisker) {
+// 	if (err) return console.error(err);
+// 	// Twisker.speak();
+// });
 
 });
