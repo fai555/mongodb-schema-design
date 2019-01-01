@@ -1,7 +1,7 @@
 // getting-started.js
 var mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/Twisker');
 
 
 var db = mongoose.connection;
@@ -65,7 +65,12 @@ var Organization = new mongoose.Schema({
 },{ timestamps: true });
 
 
-var OrganizationModel = mongoose.model("Twisker", Organization);
+var OrganizationModel = mongoose.model("Organization", Organization);
+var GroupModel = mongoose.model("Group", Group);
+var UserModel = mongoose.model("User", User);
+var TimelineModel = mongoose.model("Timeline", Timeline);
+
+
 var Twisker = new OrganizationModel({
 	orgName:"Twisker",
 	dateCreated: new Date(),
