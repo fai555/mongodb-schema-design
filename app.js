@@ -21,7 +21,12 @@ db.once('open', function() {
   var Post = new mongoose.Schema({
 	text: String,
 	postType: String,
-	replies: [Reply],
+	replies: [
+		{
+			type: ObjectId,
+			ref: 'Reply',
+		}
+	],
 },{ timestamps: true })
 
 
@@ -32,7 +37,12 @@ var Timeline = new mongoose.Schema({
 	ownerType: String,
 	authorId: String,
 	authorName: String,
-	posts:[Post],
+	posts:[
+		{
+			type: ObjectId,
+			ref: 'Post',
+		}
+	],
 },{ timestamps: true })
 
 var User = new mongoose.Schema({
@@ -43,7 +53,12 @@ var User = new mongoose.Schema({
 	location: String,
 	settings: String,
 	memberType: String,
-	timelines: [Timeline],
+	timelines: [
+		{
+			type: ObjectId,
+			ref: 'Timeline',
+		}
+	],
 },{ timestamps: true });
   
 var Group = new mongoose.Schema({
@@ -53,7 +68,12 @@ var Group = new mongoose.Schema({
 	bio: String,
 	accessLevel: String,
 	settings: String,
-	member: [User],
+	member: [
+		{
+			type: ObjectId,
+			ref: 'User',
+		}
+	],
 },{ timestamps: true });
   
 var Organization = new mongoose.Schema({
@@ -65,7 +85,10 @@ var Organization = new mongoose.Schema({
 	location: String,
 	accessLevel: String,
 	settings: String,
-	groups:[Group],
+	groups:[{
+		type: ObjectId,
+		ref: 'Group',
+	}],
 },{ timestamps: true });
 
 
@@ -73,10 +96,12 @@ var OrganizationModel = mongoose.model("Organization", Organization);
 var GroupModel = mongoose.model("Group", Group);
 var UserModel = mongoose.model("User", User);
 var TimelineModel = mongoose.model("Timeline", Timeline);
+var PostModel = mongoose.model("Post", Post);
+var ReplyModel = mongoose.model("Reply", Reply);
 
-var organization = new OrganizationModel;
 
-organization.insertOne(
+
+OrganizationModel.create([
 	{
 		orgName:"Twisker",
 		dateCreated: new Date(),
@@ -86,31 +111,170 @@ organization.insertOne(
 		location: "location",
 		accessLevel: "accessLevel",
 		settings: "settings",
-		groups:[],
-		members:[],
+		groups:[]
+	
+	},
+	{
+		orgName:"Google",
+		dateCreated: new Date(),
+		orgURL: "orgURL",
+		profilePictureURL: "profilePictureURL",
+		bio: "bio",
+		location: "location",
+		accessLevel: "accessLevel",
+		settings: "settings",
+		groups:[]
+	
 	}
-)
+]).then(function(data){
+	
+	data.map(function(org, index){
+
+
+
+
+
+
+
+		org.groups.push(org._id)
+		org.save();
+	})
+
+
+})
+
+
+// var organization = new OrganizationModel(
+// 	{
+// 	orgName:"Twisker",
+// 	dateCreated: new Date(),
+// 	orgURL: "orgURL",
+// 	profilePictureURL: "profilePictureURL",
+// 	bio: "bio",
+// 	location: "location",
+// 	accessLevel: "accessLevel",
+// 	settings: "settings",
+// 	groups:[]
+
+// })
+
+
+// organization.save(function(err){
+
+// 	// var group = new GroupModel(
+// 	// 	{
+// 	// 		groupName: "Admin",
+// 	// 		dateCreated: new Date(),
+// 	// 		profilePictureURL: "profilePictureURL",
+// 	// 		bio: "bio",
+// 	// 		accessLevel: "accessLevel",
+// 	// 		settings: "settings",
+// 	// 		members:[],
+// 	// 		timelines:[],
+// 	// 	}
+// 	// );
+
+
+
+// 	// group.save()
+
+// 	// console.log(gr._id)
+
+// 	var groupModel = new GroupModel();
+
+// 	groupModel.create([
+// 		{
+// 			groupName: "Admin",
+// 			dateCreated: new Date(),
+// 			profilePictureURL: "profilePictureURL",
+// 			bio: "bio",
+// 			accessLevel: "accessLevel",
+// 			settings: "settings",
+// 			members:[],
+// 			timelines:[],
+// 		},
+// 		{
+// 			groupName: "Design",
+// 			dateCreated: new Date(),
+// 			profilePictureURL: "profilePictureURL",
+// 			bio: "bio",
+// 			accessLevel: "accessLevel",
+// 			settings: "settings",
+// 			members:[],
+// 			timelines:[],
+// 		}
+// 	]);
+
+// 	groupModel.save(function(err, data){
+// 		console.log(data)
+// 	})
+
+
+
+
+// });
+
+
+// UserModel.create(
+				
+// 	{
+// 		username: "username "+index,
+// 		dateJoined: new Date(),
+// 		profilePictureURL: "profilePictureURL",
+// 		occupation: "occupation",
+// 		location: "location",
+// 		settings: "settings",
+// 		memberType: "memberType",
+// 		timelines: [],
+// 	}
+// ,
+// function(err, user){
+// 	// console.log(user._id);
+// 	group.members.push(user._id);
+
+// 	// groups.save()
+// }
+// )
+
+
+
+// var organization = new OrganizationModel;
+
+// organization.insertOne(
+// 	{
+// 		orgName:"Twisker",
+// 		dateCreated: new Date(),
+// 		orgURL: "orgURL",
+// 		profilePictureURL: "profilePictureURL",
+// 		bio: "bio",
+// 		location: "location",
+// 		accessLevel: "accessLevel",
+// 		settings: "settings",
+// 		groups:[],
+// 		members:[],
+// 	}
+// )
 
 
 // organization.groups.push()
 
-var group = new GroupModel(
-		{
-		groupName: "Admin",
-		dateCreated: new Date(),
-		profilePictureURL: "profilePictureURL",
-		bio: "bio",
-		accessLevel: "accessLevel",
-		settings: "settings",
-		members:[],
-		timelines:[],
-	}, function(err, gr){
-		organization.groups.push(gr._id)
-	}
-);
+// var group = new GroupModel(
+// 		{
+// 		groupName: "Admin",
+// 		dateCreated: new Date(),
+// 		profilePictureURL: "profilePictureURL",
+// 		bio: "bio",
+// 		accessLevel: "accessLevel",
+// 		settings: "settings",
+// 		members:[],
+// 		timelines:[],
+// 	}, function(err, gr){
+// 		organization.groups.push(gr._id)
+// 	}
+// );
 
-organization.save()
-group.save()
+// organization.save()
+// group.save()
   
 });
 
