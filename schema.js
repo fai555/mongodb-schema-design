@@ -5,21 +5,140 @@ const assert = require('assert');
 const url = 'mongodb://localhost:27017';
  
 // Database Name
-const dbName = 'twisker';
+const dbName = 'Twisker';
  
 
 const insertDocuments = function(db, callback) {
     // Get the documents collection
-    const collection = db.collection('documents');
+    const organization = db.collection('organization');
+    const group = db.collection('group');
+    const user = db.collection('organization');
+    const timeline = db.collection('timeline');
     // Insert some documents
-    collection.insertMany([
-      {a : 1}, {a : 2}, {a : 3}
-    ], function(err, result) {
-      assert.equal(err, null);
-      assert.equal(3, result.result.n);
-      assert.equal(3, result.ops.length);
-      console.log("Inserted 3 documents into the collection");
-      callback(result);
+    organization.insertMany(
+      [{
+        orgName:"Twisker",
+        dateCreated: new Date(),
+        orgURL: "orgURL",
+        profilePictureURL: "profilePictureURL",
+        bio: "bio",
+        location: "location",
+        accessLevel: "accessLevel",
+        settings: "settings",
+        groups:[],
+        members:[],
+      },
+      {
+        orgName:"org 2",
+        dateCreated: new Date(),
+        orgURL: "orgURL",
+        profilePictureURL: "profilePictureURL",
+        bio: "bio",
+        location: "location",
+        accessLevel: "accessLevel",
+        settings: "settings",
+        groups:[],
+        members:[],
+      }
+    ]
+      , function(err, org) {
+      
+      // console.log(JSON.stringify(result,null,4))
+
+      group.insertMany(
+        [
+          {
+            groupName: "Design",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 1",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 2",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 3",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 4",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 5",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 6",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 7",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          },
+          {
+            groupName: "Group 8",
+            dateCreated: new Date(),
+            profilePictureURL: "profilePictureURL",
+            bio: "bio",
+            accessLevel: "accessLevel",
+            settings: "settings",
+            members: []
+          }
+        ],
+        function(err, gr){
+          
+          
+
+
+        }
+      )
+
+
+      callback(org);
     });
   }
 
@@ -31,6 +150,7 @@ MongoClient.connect(url, function(err, client) {
   console.log("Connected successfully to server");
  
   const db = client.db(dbName);
+  db.dropDatabase();
  
   insertDocuments(db, function() {
     client.close();
